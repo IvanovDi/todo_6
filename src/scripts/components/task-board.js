@@ -10,7 +10,7 @@ class TaskBoard {
         this.id = createID();
         this.ui = ui;
         this.title = title || 'Task Board';
-        this.lists = [{title: 'name'}, {title: 'name1'}, {title: 'name2'}];
+        this.lists = JSON.parse(localStorage.getItem('lists')) || [];
 
         this.init();
     }
@@ -22,17 +22,23 @@ class TaskBoard {
 
         this.renderTaskLists();
 
+        $(this.ui.clearBoard).click(() => this.clean());
 
-            $(this.ui.createForm).submit(function (e) {
-                e.preventDefault();
+        $(this.ui.createForm).submit(function (e) {
+            e.preventDefault();
+
             const title = $(this.elements.input).val();
-            self.addList(new TaskList(title, {
+
+            const taskList = new TaskList(title, {
                 template: self.ui.taskListTemplate,
                 element: self.ui.taskListElement,
                 taskTemplate: self.ui.taskTemplate,
                 taskList: self.ui.taskList,
                 createForm: '.taskCreator'
-            }));
+            });
+
+            self.addList(taskList);
+
             $(this.elements.input).val('');
         });
     }
@@ -45,8 +51,10 @@ class TaskBoard {
                 taskList: this.ui.taskList,
                 createForm: '.taskCreator'
             });
-
+            taskList.tasks = list.tasks;
+            taskList.id = list.id;
             taskList.element = $(taskList.element({list: taskList}));
+
             $(this.ui.taskLists).append(taskList.element);
 
             taskList.bindEvents();
@@ -56,11 +64,17 @@ class TaskBoard {
 
     addList(list) {
         this.lists.push(list);
+        localStorage.setItem('lists', JSON.stringify(this.lists));
 
         list.element = $(list.element({list}));
         $(this.ui.taskLists).append(list.element);
 
         list.bindEvents();
+    }
+
+    clean() {
+        localStorage.clear();
+        location.reload();
     }
 
 }

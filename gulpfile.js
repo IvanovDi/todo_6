@@ -3,7 +3,12 @@ const babelify = require('babelify');
 const browserify = require('browserify');
 const browserSync = require('browser-sync').create();
 const source = require('vinyl-source-stream');
+const del = require('del');
 
+gulp.task('views', function() {
+  return gulp.src('./src/views/index.html')
+    .pipe(gulp.dest('./public'))
+});
 
 gulp.task('scripts', function() {
   return browserify({
@@ -16,7 +21,8 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('./src/**/*.js', gulp.series('scripts'));
+  gulp.watch('./src/views/**/*.html', gulp.series('views'));
+  gulp.watch('./src/scripts/**/*.js', gulp.series('scripts'));
 });
 
 gulp.task('serve', function () {
@@ -28,7 +34,13 @@ gulp.task('serve', function () {
   browserSync.watch('./public/**/*.*').on('change', browserSync.reload);
 });
 
+gulp.task('clean', function () {
+  return del('./public')
+});
+
+
 gulp.task('build', gulp.series(
+    'views',
     'scripts'
 ));
 

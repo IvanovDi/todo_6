@@ -9,7 +9,7 @@ class TaskList {
     constructor(title, ui) {
         this.id = createID();
         this.title = title || 'Task List';
-        this.tasks = [{title: 'task'}, {title:'task1'}, {title:'task2'}];
+        this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         this.ui = ui;
 
         this.init();
@@ -46,7 +46,23 @@ class TaskList {
     }
 
     addTask(task) {
-        this.tasks.push(task);
+        const taskItem = {
+            id: task.id,
+            title: task.title,
+            isDone: task.isDone
+        };
+        this.tasks.push(taskItem);
+        const lists = JSON.parse(localStorage.getItem('lists'));
+
+        lists.forEach(list => {
+            console.log(list);
+            if (list.id == this.id) {
+                console.log('^');
+                list.tasks.push(task);
+            }
+        });
+
+        localStorage.setItem('lists', JSON.stringify(lists));
 
         task.element = $(task.element({task}));
         $(`[data-list-id=${this.id}]`).find(this.ui.taskList).append(task.element);

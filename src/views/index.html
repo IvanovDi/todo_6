@@ -16,6 +16,7 @@
             display: flex;
             overflow: auto;
         }
+        .clearBoard { float: right; }
     </style>
 </head>
 <body>
@@ -43,7 +44,10 @@
     <!--шаблон для новых досок-->
     <script id="taskBoard_src" type="text/x-handlebars-template">
         <div class="taskBoard" data-board-id="{{board.id}}">
-            <h3>{{board.title}}</h3>
+            <h3>
+                {{board.title}}
+                <button class="clearBoard">Clean board</button>
+            </h3>
 
             <form id="listCreator">
                 <input type="text" class="board__text" name="input">
