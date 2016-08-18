@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script defer src="./bundle.js"></script>
+    <title>Tasks Board</title>
+
+    <style>
+        ul {
+            border: 1px solid;
+            padding: 15px;
+            margin-top: 15px;
+            list-style-position: inside;
+        }
+        #taskLists {
+            display: flex;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <!--шаблон для задач-->
+    <script id="task_src" type="text/x-handlebars-template">
+        <li class="task" data-task-id="{{task.id}}">
+            {{task.title}}
+        </li>
+    </script>
+
+    <!--шаблон для новых списков-->
+    <script id="taskListItem_src" type="text/x-handlebars-template">
+        <ul class="taskListItem" data-list-id="{{list.id}}">
+            <h3>{{list.title}}</h3>
+
+            <form class="taskCreator">
+                <input type="text" class="board__text" name="input">
+                <button class="board__button" name="button">Add task</button>
+            </form>
+
+            <ul class="taskList"></ul>
+        </ul>
+    </script>
+
+    <!--шаблон для новых досок-->
+    <script id="taskBoard_src" type="text/x-handlebars-template">
+        <div class="taskBoard" data-board-id="{{board.id}}">
+            <h3>{{board.title}}</h3>
+
+            <form id="listCreator">
+                <input type="text" class="board__text" name="input">
+                <button class="board__button" name="button">Add list</button>
+            </form>
+
+            <ul id="taskLists"></ul>
+        </div>
+    </script><div id="taskBoard_dist"></div>
+
+</body>
+</html>
